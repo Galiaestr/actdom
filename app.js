@@ -15,10 +15,10 @@ const buildCard = ({ id, titulo, tag }) => {
         <div class="card__head">
             <span class="badge">${tag}</span>
             <div class="actions">
-                <button class="icon" type="button" data-action="fav">☆</button>
-                <button class="icon" type="button" data-action="done">✓</button>
-                <button class="icon danger" type="button" data-action="del">🗑</button>
-            </div>
+            <button class="icon" type="button" data-action="fav" aria-label="Marcar favorito">☆</button>
+            <button class="icon" type="button" data-action="done" aria-label="Marcar completada">✓</button>
+            <button class="icon danger" type="button" data-action="del" aria-label="Eliminar">🗑</button>
+          </div>
         </div>
         <p class="card__title">${titulo}</p>
     `;
@@ -47,4 +47,13 @@ formTarea.addEventListener('submit', (e) => {
     listaTareas.append(card);
 
     inputTitulo.value = ''; // limpiar campo
+});
+
+//Evento para eliminar tareas
+listaTareas.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-action="del"]');
+    if (!btn) return; //si no es boton eliminar ignorar
+    const card = btn.closest('.card');
+    if (!card) return;
+    card.remove();
 });
