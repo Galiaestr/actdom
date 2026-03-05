@@ -57,3 +57,13 @@ listaTareas.addEventListener('click', (e) => {
     if (!card) return;
     card.remove();
 });
+
+// Evento para marcar como completada
+listaTareas.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-action="done"]');
+    if (!btn) return; // si no es boton ignorar 
+    const card = btn.closest('.card');
+    if (!card) return;
+    // Alternar clase visual 
+    card.classList.toggle('is-done');
+});
