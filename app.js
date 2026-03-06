@@ -47,6 +47,7 @@ formTarea.addEventListener('submit', (e) => {
     listaTareas.append(card);
 
     inputTitulo.value = ''; 
+    aplicarFiltro(); 
 });
 
 // Evento para eliminar tareas
@@ -56,6 +57,7 @@ listaTareas.addEventListener('click', (e) => {
     const card = btn.closest('.card');
     if (!card) return;
     card.remove();
+    aplicarFiltro(); 
 });
 
 // Evento para marcar como completada
@@ -77,4 +79,44 @@ listaTareas.addEventListener('click', (e) => {
     const fav = card.dataset.fav === '1';
     card.dataset.fav = fav ? '0' : '1';
     btn.textContent = fav ? '☆' : '★';
+    aplicarFiltro(); 
 });
+
+// Filtro de tareas 
+let filtroActivo = 'all'; 
+
+const chips = $$('.filters .chip'); 
+
+chips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    // quitar la clase activa de todos
+    chips.forEach(c => c.classList.remove('is-active'));
+    // activar el chip seleccionado
+    chip.classList.add('is-active');
+    // guardar el filtro elegido
+    filtroActivo = chip.dataset.filter;
+    // aplicar el filtro
+    aplicarFiltro();
+  });
+});
+
+function aplicarFiltro() {
+  const cards = $$('#listaTareas .card');
+
+  cards.forEach(card => {
+    const tag = card.dataset.tag;
+    const esFav = card.dataset.fav === '1';
+
+    let mostrar = false;
+
+    if (filtroActivo === 'all') {
+      mostrar = true;
+    } else if (filtroActivo === 'fav') {
+      mostrar = esFav;
+    } else {
+      mostrar = (tag === filtroActivo);
+    }
+
+    card.style.display = mostrar ? '' : 'none'; 
+  });
+}
