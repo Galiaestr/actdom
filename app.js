@@ -30,6 +30,8 @@ const formTarea = $('#formTarea');
 const inputTitulo = $('#inputTitulo');
 const selectTag = $('#selectTag');
 const listaTareas = $('#listaTareas');
+const inputBuscar = $('#inputBuscar');
+const btnLimpiarBuscar = $('#btnLimpiarBuscar');
 
 // Evento para agregar tareas
 formTarea.addEventListener('submit', (e) => {
@@ -118,5 +120,44 @@ function aplicarFiltro() {
     }
 
     card.style.display = mostrar ? '' : 'none'; 
+  });
+}
+
+//Evento Busqueda
+inputBuscar.addEventListener('input', () => {
+  aplicarFiltro();
+});
+
+btnLimpiarBuscar.addEventListener('click', () => {
+  inputBuscar.value = '';
+  aplicarFiltro(); 
+});
+
+function aplicarFiltro() {
+  const cards = $$('#listaTareas .card');
+  const query = inputBuscar.value.trim().toLowerCase();
+
+  cards.forEach(card => {
+    const tag = card.dataset.tag;
+    const esFav = card.dataset.fav === '1';
+    const titulo = card.querySelector('.card__title').textContent.toLowerCase();
+
+    let mostrar = false;
+
+    // lógica de filtros por categoría
+    if (filtroActivo === 'all') {
+      mostrar = true;
+    } else if (filtroActivo === 'fav') {
+      mostrar = esFav;
+    } else {
+      mostrar = (tag === filtroActivo);
+    }
+
+    // lógica de búsqueda por texto
+    if (query) {
+      mostrar = mostrar && titulo.includes(query);
+    }
+
+    card.style.display = mostrar ? '' : 'none';
   });
 }
