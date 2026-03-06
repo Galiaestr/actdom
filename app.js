@@ -15,10 +15,10 @@ const buildCard = ({ id, titulo, tag }) => {
         <div class="card__head">
             <span class="badge">${tag}</span>
             <div class="actions">
-            <button class="icon" type="button" data-action="fav" aria-label="Marcar favorito">☆</button>
-            <button class="icon" type="button" data-action="done" aria-label="Marcar completada">✓</button>
-            <button class="icon danger" type="button" data-action="del" aria-label="Eliminar">🗑</button>
-          </div>
+                <button class="icon" type="button" data-action="fav">☆</button>
+                <button class="icon" type="button" data-action="done">✓</button>
+                <button class="icon danger" type="button" data-action="del">🗑</button>
+            </div>
         </div>
         <p class="card__title">${titulo}</p>
     `;
@@ -46,13 +46,13 @@ formTarea.addEventListener('submit', (e) => {
     const card = buildCard(nuevaTarea);
     listaTareas.append(card);
 
-    inputTitulo.value = ''; // limpiar campo
+    inputTitulo.value = ''; 
 });
 
-//Evento para eliminar tareas
+// Evento para eliminar tareas
 listaTareas.addEventListener('click', (e) => {
     const btn = e.target.closest('button[data-action="del"]');
-    if (!btn) return; //si no es boton eliminar ignorar
+    if (!btn) return;
     const card = btn.closest('.card');
     if (!card) return;
     card.remove();
@@ -61,9 +61,20 @@ listaTareas.addEventListener('click', (e) => {
 // Evento para marcar como completada
 listaTareas.addEventListener('click', (e) => {
     const btn = e.target.closest('button[data-action="done"]');
-    if (!btn) return; // si no es boton ignorar 
+    if (!btn) return;
     const card = btn.closest('.card');
     if (!card) return;
-    // Alternar clase visual 
     card.classList.toggle('is-done');
+});
+
+// Evento para marcar como favorita
+listaTareas.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-action="fav"]');
+    if (!btn) return;
+    const card = btn.closest('.card');
+    if (!card) return;
+
+    const fav = card.dataset.fav === '1';
+    card.dataset.fav = fav ? '0' : '1';
+    btn.textContent = fav ? '☆' : '★';
 });
